@@ -9,6 +9,7 @@ import statements
 		'[class.forminput-locked]': 'isLockedState',
 		'[class.forminput-monospaced]': 'monospaced',
         '[class.forminput-withbutton]': 'hasbutton',
+		'[class.forminput-withsublabel]': 'sublabel'
 	},
     template: `
 		<div class="forminput-x-labelrow">
@@ -19,12 +20,9 @@ import statements
 			</label>
         	<ng-content select="[label-additions]"></ng-content>
         </div>
-		<p class="forminput-x-sublabel" *ngIf="sublabel">{{ sublabel }}</p>
-		<p class="forminput-x-sublabel" *ngIf="sublabel">{{ remainingCharactersNum }}{{ sublabel }}</p>
-		<p class="forminput-x-sublabel" *ngIf="sublabel"><span *ngIf="remainingCharactersNum > 0">{{ remainingCharactersNum }}</span>{{ sublabel }}</p>
+		<p class="forminput-x-sublabel" *ngIf="sublabel"><span *ngIf="remainingCharactersNum >= 0">{{ remainingCharactersNum }}</span>{{ sublabel }}</p>
 
         <label class="visuallyhidden" [attr.for]="inputName" *ngIf="ariaLabel">{{ ariaLabel }}</label>
-		<p class="forminput-x-sublabel" *ngIf="description">{{ description }}</p>
 		<div class="forminput-x-inputs">
 			<input [type]="fieldType"
 			       *ngIf="! multiline"
@@ -32,9 +30,11 @@ import statements
 			       [id]="inputId"
 			       [formControl]="control"
 			       [placeholder]="placeholder || ''"
+			       [maxlength] = "maxchar"
 			       (change)="postProcessInput()"
 			       (focus)="cacheControlState()"
 			       (keypress)="handleKeyPress($event)"
+			       (keyup)="handleKeyUp($event)"
 			       #textInput
 			/>
 			<div class="forminput-x-button" *ngIf="hasbutton">
@@ -50,10 +50,12 @@ import statements
 			          [name]="inputName"
 			          [id]="inputId"
 			          [formControl]="control"
+			          [maxlength] = "maxchar"
 			          [placeholder]="placeholder || ''"
 			          (change)="postProcessInput()"
 			          (focus)="cacheControlState()"
 			          (keypress)="handleKeyPress($event)"
+			          (keyup)="handleKeyUp($event)"
 			          #textareaInput
 			></textarea>
 		</div>
@@ -71,17 +73,26 @@ export class FormFieldText implements OnChanges, AfterViewInit {
 	@Input() errorMessage: CustomValidatorMessages;
 	@Input() multiline: boolean = false;
     @Input() monospaced: boolean = false;
-    @Input() description: string;
     @Input() sublabel: string;
 	@Input() placeholder: string;
 	@Input() fieldType: FormFieldTextInputType = 'text';
 	@Input() optional: boolean = false;
 	@Input() hasbutton: boolean = false;
+	@Input() maxchar: number;
 
 	Additional Input/Output declarations
 
+	remainingCharactersNum = this.maxchar;
 
+	ngOnInit() {
+		if (this.maxchar) {
+			this.remainingCharactersNum = this.maxchar - this.control.value.length;
+		}
+	}
 
+	handleKeyUp(event: KeyboardEvent) {
+		this.remainingCharactersNum = this.maxchar - this.control.value.length;
+	}
 
 	Component functions
 }

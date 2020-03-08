@@ -5,43 +5,39 @@ import statements
 	template: `
 		<main>
 			<form-message></form-message>
-			<header class="wrap wrap-light l-containerhorizontal l-heading">
-				<nav>
-					<h1 class="visuallyhidden">Breadcrumbs</h1>
-					<ul class="breadcrumb">
-						<li><a [routerLink]="['/issuer']">Collections</a></li>
-					</ul>
-				</nav>
-				<div class="heading">
-					<div class="heading-x-text">
-						<h1>Add Badge Collection</h1>
-						<p>Adding a collection allows your to organize your badges.</p>
-					</div>
-                </div>
+            <header class="l-containerxaxis topbar">
+				<h3 class="topbar-x-heading">Add Badge Collection</h3>
+				<p class="topbar-x-subheading">Adding a collection allows your to organize your badges.</p>
 			</header>
-		
-			<div class="l-containerhorizontal l-containervertical l-childrenvertical wrap">
-				<form class="l-form l-form-image"
-                      [formGroup]="badgeCollectionForm"
+            <div class="l-containerxaxis u-margin-yaxis3x u-width-formsmall">
+                <form [formGroup]="badgeCollectionForm"
 				      (ngSubmit)="onSubmit(badgeCollectionForm.value)"
 				      novalidate>
-					<fieldset>
-                         <bg-formfield-text [control]="badgeCollectionForm.controls.collectionName"
+                    <fieldset
+                        aria-labelledby="heading-add-badge-collection"
+                        role="group">
+                        <legend class="visuallyhidden" id="heading-add-badge-collection">Add Badge Collection</legend>
+                            <bg-formfield-text
+                                           [control]="badgeCollectionForm.controls.collectionName"
 						                   [label]="'Name'"
+                                           [maxchar]=128
 						                   [errorMessage]="{required:'Please enter a collection name'}"
-                                           [autofocus]="true">
-                                           [sublabel]="'Max 128 characters'">
-                            <span label-additions>Max 128 characters</span>
+                                           [autofocus]="true"
+                                           [sublabel]="' remaining characters'">
 	                    </bg-formfield-text>
-                        <bg-formfield-text [control]="badgeCollectionForm.controls.collectionDescription"
+                        <div class="u-margin-top2x">
+							<bg-formfield-text
+								           [control]="badgeCollectionForm.controls.collectionDescription"
 						                   [label]="'Description'"
 					                       [errorMessage]="{required: 'Please enter a description'}"
-                                           [multiline]="true">
-                                           [sublabel]="'Max 255 characters'">
-                            <span label-additions>Max 255 characters</span>
+                                           [maxchar]=255
+                                           [multiline]="true"
+                                           [sublabel]="' remaining characters'">
                         </bg-formfield-text>
-                        <div class="l-form-x-offset l-childrenhorizontal l-childrenhorizontal-small l-childrenhorizontal-right">
+                        </div>
+						<div class="l-flex l-flex-1x l-flex-justifyend u-margin-top2x">
                             <a [routerLink]="['/recipient/badge-collections']"
+                                class="button button-secondary"
 							    class="button button-primaryghost"
 							    [disabled-when-requesting]="true"
 							>Cancel</a>

@@ -5,16 +5,16 @@ import statements
 	template: `
 		<main>
 			<form-message></form-message>
-
-            <div class="l-auth">
+            <header class="l-containerxaxis topbar">
 				<!-- OAuth Banner -->
 				<oauth-banner></oauth-banner>
 				<!-- Title Message -->
-				<h3 class="l-auth-x-title title title-bold" id="heading-form">Forgot your password?</h3>
-                <p class="l-auth-x-text text text-quiet">Fill in your email, and we'll help you reset your password</p>
+				<h3 class="topbar-x-heading" id="heading-form">Forgot your password?</h3>
+                <p class="topbar-x-subheading">Fill in your email, and we'll help you reset your password</p>
+            </header>
+			<div class="l-containerxaxis u-margin-top3x u-width-formsmall">
 				<!-- Login Form -->
-                <form class="l-form l-form-span "
-                      role="form"
+                <form role="form"
 				      aria-labelledby="heading-form"
 				      [formGroup]="requestPasswordResetForm"
 				      (ngSubmit)="submitResetRequest()"
@@ -29,7 +29,7 @@ import statements
 						                   [initialValue]="prefilledEmail || ''"
 						></bg-formfield-text>
 					</fieldset>
-                    <div class="l-form-x-offset l-childrenhorizontal l-childrenhorizontal-right">
+                    <div class="l-flex l-flex-1x l-flex-justifyend u-margin-top2x">
 						<a class="button button-secondary"
 						   [routerLink]="['/auth/login']"
 						   [disabled-when-requesting]="true"
